@@ -1,18 +1,27 @@
 from flask import Flask, jsonify ,request
 from flaskext.mysql import MySQL
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 mysql = MySQL()
 
+UPLOAD_FOLDER = './image_source/'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'aacd1234'
 app.config['MYSQL_DATABASE_DB'] = 'flask_book'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 mysql.init_app(app)
 conn = mysql.connect()
 cur = conn.cursor()
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def all_data_get():
@@ -43,11 +52,31 @@ def one_data_get(id):
 @app.route('/insert_book', methods=['POST'])
 def data_post():
     
-    json_data = request.json
-    json_data = list(json_data.values())
+    # json_data = request.json
+  
+    form_data = request.form
+    json_data = dict(form_data)
+    if not list(request.files):
+        json_data['cover'] = ''
+    else:
+        cover = request.files['cover']
+        if cover and allowed_file(cover.filename):
+            filename = secure_filename(cover.filename)
+            cover.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            json_data['cover'] = filename
     
-    excec = cur.execute('''INSERT INTO tbl_books(title,description,author,date_book,price,book_status) 
-                VALUES(%s,%s,%s,%s,%s,%s)''',json_data)
+    # json_data = list(json_data.values())
+    # print(type(json_data))
+    # exit()
+    excec = cur.execute('''INSERT INTO tbl_books(title,description,author,date_book,price,cover,book_status) 
+                VALUES(%s,%s,%s,%s,%s,%s,%s)''',(
+                json_data['title'],
+                json_data['description'],
+                json_data['author'],
+                json_data['date_book'],
+                json_data['price'],
+                json_data['cover'],
+                json_data['book_status']))
             
     conn.commit()
     if excec:
