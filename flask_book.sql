@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 19, 2019 at 11:47 AM
+-- Generation Time: Mar 19, 2019 at 03:55 PM
 -- Server version: 5.7.25-0ubuntu0.18.04.2
 -- PHP Version: 7.2.15-0ubuntu0.18.04.1
 
@@ -33,16 +33,20 @@ CREATE TABLE `tbl_books` (
   `author` varchar(255) NOT NULL,
   `date_book` date NOT NULL,
   `price` varchar(255) NOT NULL,
-  `book_status` enum('borrowed','available') NOT NULL
+  `cover` varchar(255) DEFAULT NULL,
+  `book_status` enum('available','borrowed') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_books`
 --
 
-INSERT INTO `tbl_books` (`id_book`, `title`, `description`, `author`, `date_book`, `price`, `book_status`) VALUES
-(1, 'Api Sejarah', 'Sejarah Besar bangsa Indonesia dari sudut pandang ulama dan santri', 'Ahmad Mansyur Suryanegara', '2019-03-12', '101000', 'available'),
-(2, 'Api Sejarah 2', 'Sejarah Indonesia Lanjutan', 'Ahmad Mansyur S', '2019-03-02', '150000', 'available');
+INSERT INTO `tbl_books` (`id_book`, `title`, `description`, `author`, `date_book`, `price`, `cover`, `book_status`) VALUES
+(1, 'Api Sejarah', 'Sejarah Besar bangsa Indonesia dari sudut pandang ulama dan santri', 'Ahmad Mansyur Suryanegara', '2019-03-12', '101000', '', 'available'),
+(2, 'Api Sejarah 2', 'Sejarah Indonesia Lanjutan', 'Ahmad Mansyur S', '2019-03-02', '150000', '', 'available'),
+(5, 'Api Sejarah 3', 'Api Sejarah 3 ni', 'Ahmad Mansyur S', '2019-03-01', '140000', 'fadlytanjung2.jpg', 'available'),
+(6, 'Api Sejarah 4', 'Api Sejarah 4 ni', 'Ahmad Mansyur S', '2019-03-01', '140000', 'fadlytanjung2.jpg', 'available'),
+(7, 'Api Sejarah 5', 'Api Sejarah 4 ni', 'Ahmad Mansyur S', '2019-03-01', '140000', '', 'available');
 
 --
 -- Indexes for dumped tables
@@ -62,7 +66,7 @@ ALTER TABLE `tbl_books`
 -- AUTO_INCREMENT for table `tbl_books`
 --
 ALTER TABLE `tbl_books`
-  MODIFY `id_book` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_book` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
