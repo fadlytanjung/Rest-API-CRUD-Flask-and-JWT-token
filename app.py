@@ -101,7 +101,7 @@ def login_post():
     r = cur.fetchone()
     conn.commit()
     if bcrypt.check_password_hash(r[2],json_data['password']):
-        print('password cocok')
+        print('Match Password')
         token = jwt.encode({
             'id_user':r[0],
             'full_name':r[3],
@@ -116,7 +116,7 @@ def login_post():
         })
         resp.status_code = 200
     else:
-        print('password tidak cocok men')
+        print('Password didn\'t match')
         resp = jsonify({
             'code':401,
             'message' : 'Login failed'
